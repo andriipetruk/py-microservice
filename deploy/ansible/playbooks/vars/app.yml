@@ -1,0 +1,8 @@
+---
+user: py-microservice
+app_name: py-microservice
+app_dir: /opt/py-microservice
+host: localhost
+application_mongo_host: localhost
+application_mongo_port: 27017
+application_mongo_dbname: datarobot

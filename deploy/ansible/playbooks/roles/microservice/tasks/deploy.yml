@@ -1,0 +1,14 @@
+---
+- name: create dirs structure
+  shell: mkdir -p {{ item }}
+  with_items:
+    - "{{ app_dir }}/app"
+    - "{{ app_dir }}/conf/uwsgi"
+    - "{{ app_dir }}/conf/nginx"
+    - "{{ app_dir }}/conf/supervisord"
+    - "{{ app_dir }}/run"
+    - "{{ app_dir }}/logs"
+
+- name: clone code from repository
+  action: git repo={{repo_url}} dest={{app_dir}}/app remote={{repo_remote}} version={{repo_version}} force=yes
+

@@ -1,0 +1,24 @@
+---
+- name: craete user {{ user }}
+  user: name={{ user }} comment="{{app_name}} user"
+
+- name: put templates
+  template: src={{ item.src }} dest={{ item.dest }} owner=root
+  with_items:
+    - { src: 'templates/uwsgi/uwsgi.ini', dest: '{{app_dir}}/conf/uwsgi/uwsgi.ini'}
+    - { src: 'templates/nginx/app.conf', dest: '/etc/nginx/conf.d/{{ app_name }}_app.conf'}
+    - { src: 'templates/nginx/vhost.conf', dest: '/etc/nginx/conf.d/{{ app_name }}_vhost.conf'}
+    - { src: 'templates/supervisord/supervisord.conf', dest: '/etc/supervisor/conf.d/{{ app_name }}.conf'}
+
+- name: Set {{app_dir}} dir permissions
+  file: dest={{ app_dir }} state=directory
+        owner={{ user }} group={{ user }}
+        mode=0775
+        recurse=yes
+
+- name: restart nginx
+  action: service name=nginx state=restarted
+
+- name: restart supervisor
+  action: service name=supervisor state=restarted
+

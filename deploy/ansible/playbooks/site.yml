@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  pre_tasks:
+   - include_vars: vars/mongodb.yml
+   - include_vars: vars/git.yml
+   - include_vars: vars/app.yml
+   - name: Update apt cache if needed.
+     apt: update_cache=yes cache_valid_time=3600
+
+- hosts: mongodb
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+    - mongodb
+
+- hosts: app
+  become: yes
+  become_method: sudo
+  roles:
+   - common
+   - microservice
+  environment:
+    MONGODB_HOST: "mongodb"
+    MONGODB_USER: ""
+    MONGODB_PASSWORD: ""
+    MONGODB_DATABASE: "pymicroservice"
+
+- hosts: balancer
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+    - load_balancer
+
+

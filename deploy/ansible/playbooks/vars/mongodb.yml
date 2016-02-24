@@ -1,0 +1,7 @@
+---    
+mongodb_enabled: yes
+mongodb_conf_auth: no
+mongodb_conf_bind_ip: 192.168.55.20
+mongodb_conf_port: 27017
+mongodb_additional_packages:
+ - python-selinux

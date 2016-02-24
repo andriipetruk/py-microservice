@@ -1,0 +1,13 @@
+---
+- name: check if virtualenv already exists
+  stat: path={{ app_dir }}/app/bin/pip
+  register: venv_dir
+
+- name: create virtualenv
+  shell: virtualenv {{ app_dir }}/app
+  when: venv_dir.stat.isreg is not defined
+
+- name: install web application dependencies
+  pip: requirements={{app_dir}}/app/src/requirements.txt
+       virtualenv={{ app_dir }}/app
+
